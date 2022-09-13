@@ -1,0 +1,91 @@
+Flutter=>Mobile Application
+
+Android=>c++,Java,Kotlin
+ios=>c#,swift
+Flutter=>Dart
+
+What is Flutter?
+=>It's a one Cross Platform Mobile Application Framework
+=>Google
+=>Community High
+
+ReactNative=>
+=>Cross Platform Mobile Application
+=>Facebook
+
+Dart Installation:
+Dart SDK
+
+SDK=>Software Development Kit[components]
+JDK=>Java Development Kit
+
+1.Download
+2.Install
+3.Set the Path
+Path=> F:\software\dartsdk-windows-x64-release\dart-sdk\bin
+
+This pc->right click->properties->advanced system settings
+->enviroment variables->click on Path->Paste your path->click on OK
+
+->open your cmd and type dart
+
+Editor->IntelijIDEA->https://www.jetbrains.com/idea/download/#section=windows
+Community
+
+1.Download
+2.Install
+3.Download Plugin[Dart][File->Settings->plugin]
+4.Restart your IDE[Integrated Development Environment]
+5.
+
+
+
+1.
+void main(List<String> arguments)
+{
+  int age=25;
+
+  if(age>=18)
+  {
+    print("Eligble");
+  }
+  else
+  {
+    print("Not Eligible");
+  }
+
+}
+
+2.
+void main(List<String> arguments)
+{
+
+      int marks =56;
+
+      if(marks>=70)
+      {
+          print("A Grade");
+      }
+      else if(marks>=60)
+      {
+        print("B Grade");
+      }
+      else if(marks>=50)
+      {
+          print("C Grade");
+      }
+      else if(marks>=40)
+      {
+          print("D Grade");
+      }
+      else
+      {
+          print("Fail");
+      }
+
+}
+
+
+
+
+
