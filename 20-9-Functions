@@ -1,0 +1,49 @@
+functions
+->work easy
+->code reuse
+->No need to repeat
+
+1)Pre defined Functions
+2)User Defined Functions
+
+4 types =>Parameter[Arguments] , Return Type
+1)With Para With Return
+2)With Para Without Return
+3)With return Without Para
+4)Without Para Without Return
+
+1)Optional
+2)Named
+3)Default
+
+int a(int a,int b) => a+b
+
+OOP=>Object Oriented Programming
+
+1)Object:Any Entity which has own state and behaviour
+ex:Pen,paper etc..
+
+2)class:Collection of objects
+ex:Human body
+
+3)abstraction:Hiding internal details and showing functionalities
+ex:Login page
+
+4)encapsualtion:wrapping up of data or binding of data
+ex:capsule
+
+5)inheritance:when one object acquire all the properties and behaviour of parent
+ex:father-son
+
+6)polymorphism:Many Ways to perform anything
+1)Method Overloading
+2)Method Overriding
+
+
+
+
+
+
+
+
+ 
