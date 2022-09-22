@@ -1,0 +1,172 @@
+1. object and class:
+void main() 
+{
+  
+    //objects
+    var s1 = Student();
+    var s2 = Student();
+    
+    String name="a";
+    //value assign
+    s1.id=101;
+    s1.name="Hamir";
+  
+    s2.id=102;
+    s2.name="Akshay";
+  
+   print("Detail of student 1 is \n id is : ${s1.id} and  \n name is : ${s1.name}");
+  print("\n");
+  print("Detail of student 2 is \n id is : ${s2.id} and  \n name is : ${s2.name}");
+     print("\n");
+  s1.a();
+    print("\n");
+  s2.b();
+  
+  
+}
+
+class Student
+{
+  
+  //Data Members,Variables
+  
+  int id=0;
+  String name="";
+
+  
+  void a()
+  {
+    print("${this.name} is now studying");
+  }
+  void b()
+  {
+   print("${this.name} is now sleeping");
+  }
+  
+}
+
+constructor:method having a same as a classname
+
+
+1 default
+2 parameterized
+3 named
+
+1. default :
+
+void main() 
+{
+  
+  var s =Student();
+
+  
+    
+  
+}
+
+class Student
+{
+  
+   
+    Student()
+    {
+      print("student");
+    }
+  
+  
+    
+  
+}
+
+
+2.Parameterized:
+void main() 
+{
+  
+  var s =Student(101,"Hamir");
+  var s2 =Student(102,"Akshay");
+  var s3 = Student(103,"Divya");
+
+  /*
+   * print("${s.id} and ${s.name}");
+    print("${s2.id} and ${s2.name}");
+    print("${s3.id} and ${s3.name}");
+    */
+  
+  s.display();
+  s2.display();
+  s3.display();
+  
+    
+  
+}
+
+class Student
+{
+    
+    int id=0;
+    String name="";
+  
+    Student(int id,String name)
+    {
+      //this -refrence keyword
+      
+        this.id=id;
+        this.name=name;
+    }
+  
+    void display()
+    {
+        print("$id and $name");
+    }
+}
+
+
+3.Named :
+
+void main() 
+{
+
+  var s = Student.mystudent();    
+  
+}
+
+class Student
+{
+  Student.mystudent()
+  {
+    print("This is my custom constructor");
+  }
+}
+
+getter-setter method->encapsulation
+
+void main() 
+{
+
+   var s =Student();
+   s.setdetail(400);
+   print(s.getdetail());
+  
+    var s2 =Student();
+   s2.setdetail(438);
+   print(s2.getdetail());
+  
+  
+    var s3 =Student();
+   s3.setdetail(458);
+   print(s3.getdetail());
+  
+}
+
+class Student
+{
+  String name="";
+  double percent=0.00;
+  
+  void setdetail(double marks) => percent = (marks / 500) * 100; 
+ 
+  double getdetail() => percent;
+}
+
+
