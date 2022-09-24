@@ -1,3 +1,32 @@
 inheritance
 keywords
 interface
+
+parent - super -base
+child -sub -derived
+
+types of inheritance:
+
+interface:collection of abstract methods 
+
+void a()//non abstract
+{
+}
+
+void a();//abstract
+
+interface A
+{
+	void a();
+}
+
+
+interface A
+{
+	void a()
+	{
+	
+	}
+}
+
+
