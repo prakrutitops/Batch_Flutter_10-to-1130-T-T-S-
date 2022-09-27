@@ -1,0 +1,15 @@
+Exception -Errors
+
+Compile time
+run time
+
+Keywords:
+
+Collection:
+List->accept all thing
+Set->only accept unique value
+Map->key,value pair
+
+mutable->can change
+
+immutable->can not change
