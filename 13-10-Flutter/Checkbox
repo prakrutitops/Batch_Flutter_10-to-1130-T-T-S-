@@ -1,1 +1,25 @@
 a
+cafe ordering system
+
+Splash ->
+
+Login -> Mob,Password(1234)
+
+HomePage ->
+
+	Menu
+
+	3 items
+
+	pizza -100-
+	burger -50-
+	coffee -70-
+
+	Order
+
+	Toast[Bill]
+on back press
+
+
+
+
