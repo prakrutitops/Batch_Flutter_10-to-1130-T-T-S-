@@ -1,0 +1,82 @@
+DDL
+1. create database
+create database databasenm;
+
+2. create table
+CREATE TABLE TABLE_NAME(id int PRIMARY KEY AUTO_INCREMENT,
+countrynm varchar(255))
+
+3. add column
+ALTER TABLE tablenm ADD columnnm datatype;
+
+4.  particular column after column add
+ALTER TABLE tablenm ADD columnnm datatype AFTER column; 
+
+
+5. datatyape change
+ALTER TABLE tablenm MODIFY columnnm datatype;
+
+
+6. Rename column
+alter table TABLE_NAME CHANGE oldcolumnnm newcolumnnm varchar(255)
+
+7. Remove column
+ALTER TABLE TABLE_NAME drop columnnm;
+
+8. only data delete structure  
+TRUNCATE TABLE country
+
+9. drop table
+DROP TABLE state
+
+10. rename table
+RENAME TABLE country TO coun
+
+
+DML
+11. insert data
+insert into tablename (database Field nm) values ('control value')
+
+12. multiple value insert
+INSERT INTO tablename (countrynm) VALUES('india'), ('pakistan')
+
+
+13. update data
+update tablenm set databasefieldnm='controlvalue' where id='id'
+
+14. delete data
+delete from tablenm where id='id'
+
+DQL
+15. select all
+select * from tablenm
+
+16. particular column dispaly
+SELECT columnnm from tablenm
+
+17. particular row display
+select * from tablenm where id='id' 
+
+19.order by
+select colnm from tblnm order by colnm asc/desc
+
+18. join
+select * from state join coun on state.cid=coun.cid
+
+19.commit:
+START TRANSACTION;
+
+//delete from register where uid=1;
+
+//commit;
+
+/*20.rollback:
+START TRANSACTION;*/
+
+/*delete from register where uid=1;
+
+rollback;*/
+
+21.join:
+SELECT id  FROM cds INNER JOIN tops  ON cds.id = tops.id
+
