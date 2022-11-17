@@ -1,10 +1,10 @@
 
- factory DatabaseHelper()
+Future<Database> get database async 
   {
 
-    if (_databaseHelper == null)
+    if (_database == null) 
     {
-      _databaseHelper = DatabaseHelper._createInstance(); // This is executed only once, singleton object
+      _database = await initializeDatabase();
     }
-    return _databaseHelper;
+    return _database;
   }
