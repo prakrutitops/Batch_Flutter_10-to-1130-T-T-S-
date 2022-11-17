@@ -1,10 +1,23 @@
 
-Future<Database> get database async 
-  {
+  Future<Database> initializeDatabase() async {
+    // Get the directory path for both Android and iOS to store database.
+    Directory directory = await getApplicationDocumentsDirectory();
+    String path = directory.path + 'notes.db';
 
-    if (_database == null) 
-    {
-      _database = await initializeDatabase();
-    }
-    return _database;
+    // Open/create the database at a given path
+    var notesDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
+    return notesDatabase;
+  }
+
+  void _createDb(Database db, int newVersion) async {
+
+    await db.execute('CREATE TABLE $noteTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT, '
+        '$colDescription TEXT, $colPriority INTEGER, $colDate TEXT)');
+  }
+
+  Future<int> insertNote(Note note) async
+  {
+    Database db = await this.database;
+    var result = await db.insert(noteTable, note.toMap());
+    return result;
   }
