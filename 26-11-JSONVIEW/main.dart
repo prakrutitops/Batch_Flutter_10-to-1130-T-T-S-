@@ -49,7 +49,12 @@ class MyAppState extends State<MyApp>
 
   }
 
-
+ @override
+  void initState()
+  {
+    super.initState();
+    this.getdata();
+  }
 
   @override
   Widget build(BuildContext context)
