@@ -1,6 +1,6 @@
 DDL
 1. create database
-create database databasenm;
+CREATE DATABASE databasenm;
 
 2. create table
 CREATE TABLE TABLE_NAME(id int PRIMARY KEY AUTO_INCREMENT,
