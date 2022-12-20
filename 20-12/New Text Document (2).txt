@@ -1,0 +1,286 @@
+http:^0.12.2
+video_player:^
+
+video:
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+
+void main() => runApp(VideoPlayerApp());
+
+class VideoPlayerApp extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	title: 'GeeksForGeeks',
+	home: VideoPlayerScreen(),
+	);
+}
+}
+
+class VideoPlayerScreen extends StatefulWidget 
+{
+	
+	VideoPlayerScreen({Key key}) : super(key: key);
+
+@override
+_VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+VideoPlayerController _controller;
+Future<void> _initializeVideoPlayerFuture;
+
+@override
+void initState() {
+	_controller = VideoPlayerController.network(
+	'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+	);
+	_initializeVideoPlayerFuture = _controller.initialize();
+
+	_controller.setLooping(true);
+
+	super.initState();
+}
+
+@override
+void dispose() {
+	_controller.dispose();
+
+	super.dispose();
+}
+
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+	appBar: AppBar(
+		title: Text('GeeksForGeeks'),
+		backgroundColor: Colors.green,
+	),
+	body: FutureBuilder(
+		future: _initializeVideoPlayerFuture,
+		builder: (context, snapshot) {
+		if (snapshot.connectionState == ConnectionState.done) {
+			return AspectRatio(
+			aspectRatio: _controller.value.aspectRatio,
+			child: VideoPlayer(_controller),
+			);
+		} else {
+			return Center(child: CircularProgressIndicator());
+		}
+		},
+	),
+	floatingActionButton: FloatingActionButton(
+		onPressed: () {
+		setState(() {
+			// pause
+			if (_controller.value.isPlaying) {
+			_controller.pause();
+			} else {
+			// play
+			_controller.play();
+			}
+		});
+		},
+		// icon
+		child: Icon(
+		_controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+		),
+	),
+	);
+}
+}
+
+syncfusion_flutter_charts:^18.3.42
+
+2.working with charts:
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+void main() {
+return runApp(_ChartApp());
+}
+
+class _ChartApp extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	title: 'Charts in Flutter',
+	theme: ThemeData(primarySwatch: Colors.blue),
+	home: _MyHomePage(),
+	);
+}
+}
+
+class _MyHomePage extends StatefulWidget {
+// ignore: prefer_const_constructors_in_immutables
+_MyHomePage({Key key}) : super(key: key);
+
+@override
+_MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<_MyHomePage> {
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+		appBar: AppBar(
+		title: const Text('GeeksForGeeks'),
+		backgroundColor: Colors.green,
+		),
+		body: SfCartesianChart(
+			primaryXAxis: CategoryAxis(),
+			// Chart title
+			title: ChartTitle(text: 'Monthly Covid-19 Infections'),
+			// Enable legend
+			legend: Legend(isVisible: true),
+			// Enable tooltip
+			tooltipBehavior: TooltipBehavior(enable: true),
+			series: <ChartSeries<_Infections, String>>[
+			LineSeries<_Infections, String>(
+				dataSource: <_Infections>[
+					_Infections('Jan', 35000),
+					_Infections('Feb', 28000),
+					_Infections('Mar', 34000),
+					_Infections('Apr', 32000),
+					_Infections('May', 40000),
+					_Infections('Jun', 60000)
+				],
+				xValueMapper: (_Infections victims, _) => victims.year,
+				yValueMapper: (_Infections victims, _) => victims.victims,
+				// Enable data label
+				dataLabelSettings: DataLabelSettings(isVisible: true))
+			]));
+}
+}
+
+class _Infections {
+_Infections(this.year, this.victims);
+
+final String year;
+final double victims;
+}
+
+3.lazy loader:
+
+lazy_loader_scrollview:^1.1.0
+
+import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+
+void main() => runApp(new MyApp());
+
+class MyApp extends StatelessWidget {
+// This widget is the root of your application.
+@override
+Widget build(BuildContext context) {
+	return new MaterialApp(
+	title: 'Example',
+	home: new MyHomePage(title: 'GeeksForGeeks'),
+	);
+}
+}
+
+class MyHomePage extends StatefulWidget {
+MyHomePage({Key key, this.title}) : super(key: key);
+
+final String title;
+
+@override
+_MyHomePageState createState() => new _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+List<int> data = [];
+int currentLength = 0;
+
+final int increment = 10;
+bool isLoading = false;
+
+@override
+void initState() {
+	_loadMore();
+	super.initState();
+}
+
+Future _loadMore() async {
+	setState(() {
+	isLoading = true;
+	});
+
+	// Add in an artificial delay
+	await new Future.delayed(const Duration(seconds: 2));
+	for (var i = currentLength; i <= currentLength + increment; i++) {
+	data.add(i);
+	}
+	setState(() {
+	isLoading = false;
+	currentLength = data.length;
+	});
+}
+
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+	appBar: AppBar(
+		title: Text(widget.title),
+		backgroundColor: Colors.green,
+	),
+	body: LazyLoadScrollView(
+		isLoading: isLoading,
+		onEndOfPage: () => _loadMore(),
+		child: ListView.builder(
+		itemCount: data.length,
+		itemBuilder: (context, position) {
+			return DemoItem(position);
+		},
+		),
+	),
+	);
+}
+}
+
+class DemoItem extends StatelessWidget {
+final int position;
+
+const DemoItem(
+	this.position, {
+		Key key,
+	}) : super(key: key);
+
+@override
+Widget build(BuildContext context) {
+	return Card(
+	child: Padding(
+		padding: const EdgeInsets.all(8.0),
+		child: Column(
+		crossAxisAlignment: CrossAxisAlignment.start,
+		children: <Widget>[
+			Row(
+			crossAxisAlignment: CrossAxisAlignment.center,
+			children: <Widget>[
+				Container(
+				color: Colors.deepOrange,
+				height: 40.0,
+				width: 40.0,
+				),
+				SizedBox(width: 8.0),
+				Text("Item $position"),
+			],
+			),
+			Text(
+				"GeeksforGeeks.org was created with a goal "
+					"in mind to provide well written, well "
+					"thought and well explained solutions for selected"
+					" questions. The core team of five super geeks"
+					" constituting of technology lovers and computer"
+					" science enthusiasts have been constantly working"
+					" in this direction ."),
+		],
+		),
+	),
+	);
+}
+}
+
