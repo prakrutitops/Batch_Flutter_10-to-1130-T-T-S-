@@ -1,0 +1,872 @@
+1.Ripple Effect:
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	final title = 'GeeksForGeeks';
+
+	return MaterialApp(
+	title: title,
+	home: MyHomePage(title: title),
+	);
+}
+}
+
+class MyHomePage extends StatelessWidget {
+final String title;
+
+MyHomePage({Key key, this.title}) : super(key: key);
+
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+	appBar: AppBar(
+		title: Text(title),
+		backgroundColor: Colors.green,
+	),
+	body: Center(child: MyButton()),
+	);
+}
+}
+
+class MyButton extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	return InkWell(
+	onTap: () {
+		Scaffold.of(context).showSnackBar(SnackBar(
+		content: Text('Hello Geeks!'),
+		));
+	},
+	child: Container(
+		padding: EdgeInsets.all(12.0),
+		color: Colors.green,
+		child: Text(' Button'),
+	),
+	);
+}
+}
+
+
+2.PhotoHero Class:
+
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
+
+class PhotoHero extends StatelessWidget {
+const PhotoHero(
+	{Key? key, required this.photo, required this.onTap, required this.width})
+	: super(key: key);
+
+final String photo;
+final VoidCallback onTap;
+final double width;
+
+@override
+Widget build(BuildContext context) {
+	return SizedBox(
+	width: width,
+	child: Hero(
+		tag: photo,
+		child: Material(
+		color: Colors.transparent,
+		child: InkWell(
+			onTap: onTap,
+			child: Image.asset(
+			photo,
+			fit: BoxFit.contain,
+			),
+		),
+		),
+	),
+	);
+}
+}
+
+class HeroAnimation extends StatelessWidget {
+const HeroAnimation({Key? key}) : super(key: key);
+
+@override
+Widget build(BuildContext context) {
+	timeDilation = 10.0;
+
+	return Scaffold(
+	appBar: AppBar(
+		title: const Text('GeeksForGeeks'),
+		backgroundColor: Colors.green,
+	),
+	body: Center(
+		child: PhotoHero(
+		photo: 'assets/images/aquaman.png',
+		width: 300.0,
+		onTap: () {
+			Navigator.of(context)
+				.push(MaterialPageRoute<void>(builder: (BuildContext context) {
+			return Scaffold(
+				appBar: AppBar(
+				title: const Text('Aquaman transition'),
+				backgroundColor: Colors.green,
+				),
+				body: Container(
+				// background of 2nd route
+				color: Colors.purple,
+				padding: const EdgeInsets.all(16.0),
+				alignment: Alignment.topLeft,
+				child: PhotoHero(
+					photo: 'assets/images/aquaman.png',
+					width: 100.0,
+					onTap: () {
+					Navigator.of(context).pop();
+					},
+				),
+				),
+			);
+			}));
+		},
+		),
+	),
+	);
+}
+}
+
+void main() {
+runApp(const MaterialApp(home: HeroAnimation()));
+}
+
+
+3.Hinge Animation:
+
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
+
+//create a stateful widget
+class HingeAnimation extends StatefulWidget {
+@override
+_HingeAnimationState createState() => _HingeAnimationState();
+
+}
+
+class _HingeAnimationState extends State<HingeAnimation> with SingleTickerProviderStateMixin{
+// animation setup
+AnimationController _controller;
+Animation _rotationAnimation;
+Animation<double> _slideAnimation;
+Animation<double> _opacityAnimation;
+
+
+@override
+void initState() {
+	super.initState();
+	_controller = AnimationController(
+	vsync: this,
+	duration: Duration(milliseconds: 2000),
+	);
+
+	_rotationAnimation = Tween(end: 0.15, begin: 0.0)
+		.animate(
+	CurvedAnimation(
+		parent: _controller,
+		curve: Interval(
+			0.0,
+			0.5,
+			curve: Curves.bounceInOut
+		),
+	),
+	);
+	// setrtup the Tween for creating curve
+	_slideAnimation = Tween(begin: 100.0, end: 600.0).animate(
+	CurvedAnimation(
+		parent: _controller,
+		curve: Interval(
+			0.5,
+			1.0,
+			curve: Curves.fastOutSlowIn)
+		,
+	),
+	);
+	// setup opacticty as per need
+	_opacityAnimation = Tween(begin: 1.0, end: 0.0).animate(
+	CurvedAnimation(
+		parent: _controller,
+		curve: Interval(
+			0.5,
+			1.0,
+			curve: Curves.fastOutSlowIn),
+	),
+	);
+
+}
+
+@override
+void dispose() {
+	super.dispose();
+	_controller.dispose();
+}
+
+// the animation widget
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+		appBar: AppBar(
+		backgroundColor: Colors.green[300],
+		automaticallyImplyLeading: false,
+		title: Text("GeeksForGeeks"),
+		centerTitle: true,
+		),
+
+		body: AnimatedBuilder(
+		animation: _slideAnimation,
+		builder: (BuildContext context, Widget child) => Container(
+			width: 200,
+			height: 150,
+			padding: EdgeInsets.all(0),
+			margin: EdgeInsets.only(
+			left: 100,
+			top: _slideAnimation.value,
+			),
+			child: RotationTransition(
+			turns: _rotationAnimation,
+			child: Center(
+				child:
+				Text('GeeksForGeeks', style: TextStyle(
+					fontSize: 25,
+					fontWeight: FontWeight.bold,
+					color: Color.fromRGBO(
+						300,
+						150,
+						500,
+						_opacityAnimation.value)
+				),),
+			),
+			),
+		),
+		),
+		// the button
+		floatingActionButtonLocation:
+		FloatingActionButtonLocation.miniCenterFloat,
+
+		floatingActionButton:
+		FloatingActionButton(
+		child: Icon(Icons.play_arrow),
+		backgroundColor: Colors.green[300],
+		onPressed: (){
+			_controller.forward();
+		},
+		),
+	);
+}
+}
+
+
+------------
+
+import 'package:flutter/material.dart';
+import 'package:flutter_hinge_animation.dart';
+
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	debugShowCheckedModeBanner: false,
+	//theme: ThemeData.dark(),
+	home: Splash(),
+	);
+}
+}
+
+
+4.Shimmer:
+
+shimmer:^1.1.2
+
+import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	title: 'GeeksForGeeks',
+	routes: {
+		'loading': (_) => LoadingListPage(),
+	},
+	theme: ThemeData(
+		primarySwatch: Colors.green,
+	),
+	home: MyHomePage(),
+	);
+}
+}
+
+class MyHomePage extends StatefulWidget {
+@override
+_MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+	appBar: AppBar(
+		title: const Text('Shimmer'),
+		backgroundColor: Colors.green,
+	),
+	body: Column(
+		children: [
+		ListTile(
+			title: const Text('Loading List'),
+			onTap: () => Navigator.of(context).pushNamed('loading'),
+		),
+		],
+	),
+	);
+}
+}
+
+class LoadingListPage extends StatefulWidget {
+@override
+_LoadingListPageState createState() => _LoadingListPageState();
+}
+
+class _LoadingListPageState extends State<LoadingListPage> {
+bool _enabled = true;
+
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+	appBar: AppBar(
+		title: const Text('Loading List'),
+	),
+	body: Container(
+		width: double.infinity,
+		padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+		child: Column(
+		mainAxisSize: MainAxisSize.max,
+		children: <Widget>[
+			Expanded(
+			child: Shimmer.fromColors(
+				baseColor: Colors.grey[300],
+				highlightColor: Colors.grey[100],
+				enabled: _enabled,
+				child: ListView.builder(
+				itemBuilder: (_, __) => Padding(
+					padding: const EdgeInsets.only(bottom: 8.0),
+					child: Row(
+					crossAxisAlignment: CrossAxisAlignment.start,
+					children: [
+						Container(
+						width: 48.0,
+						height: 48.0,
+						color: Colors.white,
+						),
+						const Padding(
+						padding: EdgeInsets.symmetric(horizontal: 8.0),
+						),
+						Expanded(
+						child: Column(
+							crossAxisAlignment: CrossAxisAlignment.start,
+							children: <Widget>[
+							Container(
+								width: double.infinity,
+								height: 8.0,
+								color: Colors.white,
+							),
+							const Padding(
+								padding: EdgeInsets.symmetric(vertical: 2.0),
+							),
+							Container(
+								width: double.infinity,
+								height: 8.0,
+								color: Colors.white,
+							),
+							const Padding(
+								padding: EdgeInsets.symmetric(vertical: 2.0),
+							),
+							Container(
+								width: 40.0,
+								height: 8.0,
+								color: Colors.white,
+							),
+							],
+						),
+						)
+					],
+					),
+				),
+				itemCount: 6,
+				),
+			),
+			),
+			Padding(
+			padding: const EdgeInsets.symmetric(vertical: 8.0),
+			child: FlatButton(
+				onPressed: () {
+					setState(() {
+					_enabled = !_enabled;
+					});
+				},
+				child: Text(
+					_enabled ? 'Stop' : 'Play',
+					style: Theme.of(context).textTheme.button.copyWith(
+						fontSize: 18.0,
+						color: _enabled ? Colors.redAccent : Colors.green),
+				)),
+			)
+		],
+		),
+	),
+	);
+}
+}
+
+5.Expansion TileCard:
+import 'package:flutter/material.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	title: 'ExpansionTileCard',
+	theme: ThemeData(
+		primarySwatch: Colors.green,
+	),
+	home: MyHomePage(title: 'GeeksForGeeks'),
+	);
+}
+}
+
+class MyHomePage extends StatefulWidget {
+MyHomePage({Key key, this.title}) : super(key: key);
+
+final String title;
+
+@override
+_MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+final GlobalKey<ExpansionTileCardState> cardA = new GlobalKey();
+final GlobalKey<ExpansionTileCardState> cardB = new GlobalKey();
+
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+	appBar: AppBar(
+		title: Text(widget.title),
+	),
+	body: ListView(
+		children: <Widget>[
+		Padding(
+			padding: const EdgeInsets.symmetric(horizontal: 12.0),
+			child: ExpansionTileCard(
+			key: cardB,
+			leading: CircleAvatar(child: Text('A')),
+			title: Text('Tap to Expand!'),
+			subtitle: Text('It has the GFG Logo.'),
+			children: <Widget>[
+				Divider(
+				thickness: 1.0,
+				height: 1.0,
+				),
+				Align(
+				alignment: Alignment.centerLeft,
+				child: Padding(
+					padding: const EdgeInsets.symmetric(
+					horizontal: 16.0,
+					vertical: 8.0,
+					),
+					child: Image.asset('assets/gfg.png')
+				),
+				),
+			],
+			),
+		),
+	]
+	),
+	);
+}
+}
+
+
+----------------------
+Staggerd gridview:
+flutter_staggered_grid_view: ^0.3.2
+
+
+void main() {
+runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+// This widget is the root of your application.
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	debugShowCheckedModeBanner: false,
+		
+	//Title of an App
+	title: 'GFG APP',
+		
+	//Theme of an App
+	theme: ThemeData(
+		primarySwatch: Colors.green,
+	),
+	darkTheme: ThemeData.dark(),
+		
+	// First Screen of App
+	home: HomePage(),
+	);
+}
+}
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+//List of Cards with size
+List<StaggeredTile> _cardTile = <StaggeredTile> [
+StaggeredTile.count(2, 3),
+StaggeredTile.count(2, 2),
+StaggeredTile.count(2, 3),
+StaggeredTile.count(2, 2),
+StaggeredTile.count(2, 3),
+StaggeredTile.count(2, 2),
+StaggeredTile.count(2, 3),
+StaggeredTile.count(2, 2),
+StaggeredTile.count(2, 3),
+StaggeredTile.count(2, 2),
+];
+
+//List of Cards with color and icon
+List<Widget>_listTile = <Widget>[
+BackGroundTile(backgroundColor: Colors.red, icondata: Icons.home),
+BackGroundTile(backgroundColor: Colors.orange, icondata: Icons.ac_unit),
+BackGroundTile(backgroundColor: Colors.pink, icondata: Icons.landscape),
+BackGroundTile(backgroundColor: Colors.green, icondata: Icons.portrait),
+BackGroundTile(backgroundColor: Colors.deepPurpleAccent, icondata: Icons.music_note),
+BackGroundTile(backgroundColor: Colors.blue, icondata: Icons.access_alarms),
+BackGroundTile(backgroundColor: Colors.indigo, icondata: Icons.satellite_outlined),
+BackGroundTile(backgroundColor: Colors.cyan, icondata: Icons.search_sharp),
+BackGroundTile(backgroundColor: Colors.yellowAccent, icondata: Icons.adjust_rounded),
+BackGroundTile(backgroundColor: Colors.deepOrange, icondata: Icons.attach_money),
+];
+
+class HomePage extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+	return Scaffold(
+	appBar: AppBar(
+		title: Text("GFG App"),
+	),
+	body: Container(
+
+		// Staggered Grid View starts here
+		child: StaggeredGridView.count(
+			crossAxisCount: 4,
+		staggeredTiles: _cardTile,
+		children: _listTile,
+		mainAxisSpacing: 4.0,
+		crossAxisSpacing: 4.0,
+
+	),
+	),
+	);
+}
+}
+class BackGroundTile extends StatelessWidget {
+final Color backgroundColor;
+final IconData icondata;
+
+BackGroundTile({this.backgroundColor, this.icondata});
+
+@override
+Widget build(BuildContext context) {
+	return Card(
+	color: backgroundColor,
+	child: Icon(icondata, color: Colors.white),
+	);
+}
+}
+
+
+flutter table-1:
+
+import 'package:flutter/material.dart';  
+  
+void main() {runApp(MyApp());}  
+  
+class MyApp extends StatefulWidget {  
+  @override  
+  _TableExample createState() => _TableExample();  
+}  
+  
+class _TableExample extends State<MyApp> {  
+  @override  
+  Widget build(BuildContext context) {  
+    return MaterialApp(  
+      home: Scaffold(  
+          appBar: AppBar(  
+            title: Text('Flutter Table Example'),  
+          ),  
+          body: Center(  
+              child: Column(children: <Widget>[  
+                Container(  
+                  margin: EdgeInsets.all(20),  
+                  child: Table(  
+                    defaultColumnWidth: FixedColumnWidth(120.0),  
+                    border: TableBorder.all(  
+                        color: Colors.black,  
+                        style: BorderStyle.solid,  
+                        width: 2),  
+                    children: [  
+                      TableRow( children: [  
+                        Column(children:[Text('Website', style: TextStyle(fontSize: 20.0))]),  
+                        Column(children:[Text('Tutorial', style: TextStyle(fontSize: 20.0))]),  
+                        Column(children:[Text('Review', style: TextStyle(fontSize: 20.0))]),  
+                      ]),  
+                      TableRow( children: [  
+                        Column(children:[Text('Javatpoint')]),  
+                        Column(children:[Text('Flutter')]),  
+                        Column(children:[Text('5*')]),  
+                      ]),  
+                      TableRow( children: [  
+                        Column(children:[Text('Javatpoint')]),  
+                        Column(children:[Text('MySQL')]),  
+                        Column(children:[Text('5*')]),  
+                      ]),  
+                      TableRow( children: [  
+                        Column(children:[Text('Javatpoint')]),  
+                        Column(children:[Text('ReactJS')]),  
+                        Column(children:[Text('5*')]),  
+                      ]),  
+                    ],  
+                  ),  
+                ),  
+              ])  
+          )),  
+    );  
+  }  
+}  
+
+flutter table-2:
+
+import 'package:flutter/material.dart';  
+  
+void main() {runApp(MyApp());}  
+  
+class MyApp extends StatefulWidget {  
+  @override  
+  _DataTableExample createState() => _DataTableExample();  
+}  
+  
+class _DataTableExample extends State<MyApp> {  
+  @override  
+  Widget build(BuildContext context) {  
+    return MaterialApp(  
+      home: Scaffold(  
+          appBar: AppBar(  
+            title: Text('Flutter DataTable Example'),  
+          ),  
+          body: ListView(children: <Widget>[  
+            Center(  
+                child: Text(  
+                  'People-Chart',  
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),  
+                )),  
+            DataTable(  
+              columns: [  
+                DataColumn(label: Text(  
+                    'ID',  
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)  
+                )),  
+                DataColumn(label: Text(  
+                    'Name',  
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)  
+                )),  
+                DataColumn(label: Text(  
+                    'Profession',  
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)  
+                )),  
+              ],  
+              rows: [  
+                DataRow(cells: [  
+                  DataCell(Text('1')),  
+                  DataCell(Text('Stephen')),  
+                  DataCell(Text('Actor')),  
+                ]),  
+                DataRow(cells: [  
+                  DataCell(Text('5')),  
+                  DataCell(Text('John')),  
+                  DataCell(Text('Student')),  
+                ]),  
+                DataRow(cells: [  
+                  DataCell(Text('10')),  
+                  DataCell(Text('Harry')),  
+                  DataCell(Text('Leader')),  
+                ]),  
+                DataRow(cells: [  
+                  DataCell(Text('15')),  
+                  DataCell(Text('Peter')),  
+                  DataCell(Text('Scientist')),  
+                ]),  
+              ],  
+            ),  
+          ])  
+      ),  
+    );  
+  }  
+}  
+
+
+
+---------------------------
+
+Flutter sms :
+
+ url_launcher:
+
+
+import 'package:flutter/material.dart';
+// import 'package:flutter/cupertino.dart'; Unused Dependency
+import 'package:url_launcher/url_launcher.dart';
+
+// app build process is triggered here
+void main() => runApp(const MyApp());
+
+_sendingMails() async {
+var url = Uri.parse("mailto:feedback@geeksforgeeks.org");
+if (await canLaunchUrl(url)) {
+	await launchUrl(url);
+} else {
+	throw 'Could not launch $url';
+}
+}
+
+_sendingSMS() async {
+var url = Uri.parse("sms:966738292");
+if (await canLaunchUrl(url)) {
+	await launchUrl(url);
+} else {
+	throw 'Could not launch $url';
+}
+}
+
+class MyApp extends StatelessWidget {
+const MyApp({Key? key}) : super(key: key);
+@override
+Widget build(BuildContext context) {
+	return MaterialApp(
+	home: Scaffold(
+		appBar: AppBar(
+		title: const Text('Geeks for Geeks'),
+		backgroundColor: Colors.green,
+		),
+		body: SafeArea(
+		child: Center(
+			child: Column(
+			children: [
+				Container(
+				height: 200.0,
+				),
+				const Text(
+				'Welcome to GFG!',
+				style: TextStyle(
+					fontSize: 35.0,
+					color: Colors.green,
+					fontWeight: FontWeight.bold,
+				),
+				),
+				Container(
+				height: 20.0,
+				),
+				const Text(
+				'For any Queries, Mail us',
+				style: TextStyle(
+					fontSize: 18.0,
+					color: Colors.green,
+					//fontWeight: FontWeight.bold,
+				),
+				),
+				Container(
+				height: 10.0,
+				),
+				ElevatedButton(
+				onPressed: _sendingMails,
+				style: ButtonStyle(
+					padding:
+						MaterialStateProperty.all(const EdgeInsets.all(5.0)),
+					textStyle: MaterialStateProperty.all(
+					const TextStyle(color: Colors.black),
+					),
+				),
+				child: const Text('Here'),
+				), // ElevatedButton
+
+				// DEPRECATED
+				// RaisedButton(
+				// onPressed: _sendingMails,
+				// child: Text('Here'),
+				// textColor: Colors.black,
+				// padding: const EdgeInsets.all(5.0),
+				// ),
+				Container(
+				height: 20.0,
+				),
+				const Text(
+				'Or Send SMS',
+				style: TextStyle(
+					fontSize: 18.0,
+					color: Colors.green,
+					//fontWeight: FontWeight.bold,
+				),
+				),
+				Container(
+				height: 10.0,
+				),
+				ElevatedButton(
+				onPressed: _sendingSMS,
+				style: ButtonStyle(
+					padding:
+						MaterialStateProperty.all(const EdgeInsets.all(5.0)),
+					textStyle: MaterialStateProperty.all(
+					const TextStyle(color: Colors.black),
+					),
+				),
+				child: const Text('Here'),
+				), // ElevatedButton
+
+				// DEPRECATED
+				// RaisedButton(
+				// onPressed: _sendingSMS,
+				// textColor: Colors.black,
+				// padding: const EdgeInsets.all(5.0),
+				// child: Text('Here'),
+				// ), child: const Text('Here'),
+			],
+			),
+		),
+		),
+	),
+	);
+}
+}
+
+
+
+
+
